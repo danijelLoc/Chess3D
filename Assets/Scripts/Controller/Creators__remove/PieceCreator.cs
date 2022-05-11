@@ -1,22 +1,14 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Assets.Scripts.Model;
 
-namespace Assets.Scripts.Model
+namespace Assets.Scripts.Controller
 {
-    public enum PieceType
-    {
-        Pawn, Knight, Bishop, Rook, Queen, King
-    }
-
-    public enum Team
-    {
-        White, Black
-    }
 
     [Serializable]
-    public class Piece
+    public class PieceCreator
     {
         [field: SerializeField]
         public PieceType Type { get; set; }
@@ -25,7 +17,7 @@ namespace Assets.Scripts.Model
         [field: SerializeField]
         public Vector2Int CurrentSquare { get; set; }
 
-        public Piece(PieceType type, Team team, Vector2Int currentSquare)
+        public PieceCreator(PieceType type, Team team, Vector2Int currentSquare)
         {
             this.Type = type;
             this.Team = team;

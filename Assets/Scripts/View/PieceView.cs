@@ -5,7 +5,7 @@ namespace Assets.Scripts.View
 {
     [RequireComponent(typeof(MeshRenderer))]
     [RequireComponent(typeof(Transform))]
-    class PieceGameObject : MonoBehaviour
+    class PieceView : MonoBehaviour
     {
         private MeshRenderer meshRenderer;
         private Transform _transform;
