@@ -6,8 +6,6 @@ namespace Assets.Scripts.Model
 {
     public class Piece
     {
-        private PieceType type;
-
         public PieceType Type { get; private set; }
         public Team Team { get; private set; }
         public Vector2Integer CurrentSquare { get; private set; }
@@ -58,7 +56,7 @@ namespace Assets.Scripts.Model
         public void MoveTo(Vector2Integer destinationSquare)
         {
             CurrentSquare = destinationSquare;
-            observer.UpdateSquareLocation(destinationSquare);
+            observer?.UpdateSquareLocation(destinationSquare);
         }
     }
 }

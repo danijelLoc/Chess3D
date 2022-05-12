@@ -10,7 +10,7 @@ namespace Assets.Scripts.Controller
     {
         private BoardView boardView;
         private GameManager gameManager;
-        [SerializeField] private ViewCreator viewCreator;
+        [SerializeField] private PieceViewCreator pieceViewCreator;
 
 
         private void Awake()
@@ -29,12 +29,11 @@ namespace Assets.Scripts.Controller
             gameManager.OnSquareSelected(squareLocation);
         }
 
-        public void ShowLayout(BoardLayout boardLayout)
+        public void ShowLayout(Board boardLayout)
         {
             foreach (Piece piece in boardLayout.pieces)
             {
-                PieceView pieceView = viewCreator.CreatePieceView(piece);
-                pieceView.transform.localPosition = boardView.PositionFromSquareLocation(piece.CurrentSquare);
+                PieceView pieceView = pieceViewCreator.CreatePieceView(piece);
                 //pieceView.enabled = piece.Destoryed;
             }
         }
@@ -44,9 +43,10 @@ namespace Assets.Scripts.Controller
             Piece king = new Piece(PieceType.King, Team.Black, new Vector2Integer(2, 4));
             Piece pawn = new Piece(PieceType.Pawn, Team.White, new Vector2Integer(1, 1));
             List<Piece> pieces = new List<Piece> { king, pawn };
-            BoardLayout boardLayout = new BoardLayout(pieces);
-            gameManager = new GameManager(boardLayout);
-            ShowLayout(boardLayout);
+            Board board = new Board(pieces);
+            board.boardMarkersObserver = boardView;
+            gameManager = new GameManager(board);
+            ShowLayout(board);
         }
     }
 }

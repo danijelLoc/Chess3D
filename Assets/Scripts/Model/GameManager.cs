@@ -1,22 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Assets.Scripts.Model
 {
     public class GameManager
     {
         private Piece selectedPiece;
-        private BoardLayout boardLayout;
+        private List<Vector2Integer> selectedPieceAvailableMoves;
+        private Board board;
         private Team currentTeam;
 
-        public GameManager(BoardLayout startingBoardLayout, Team startingTeam = Team.White)
+        public GameManager(Board startingBoardLayout, Team startingTeam = Team.White)
         {
-            this.boardLayout = startingBoardLayout;
+            this.board = startingBoardLayout;
             currentTeam = startingTeam;
         }
 
         public void OnSquareSelected(Vector2Integer squareLocation)
         {
-            Piece piece = boardLayout.Board[squareLocation.X, squareLocation.Y];
+            Piece piece = board.Layout[squareLocation.X, squareLocation.Y];
             if (selectedPiece != null)
             {
                 if (piece != null && selectedPiece == piece)
@@ -30,14 +32,13 @@ namespace Assets.Scripts.Model
             {
                 if (piece != null && piece.Team == currentTeam)
                     Select(piece);
-                   
             }
         }
 
         private void TryToMoveSelectedPiece(Vector2Integer destinationSquare)
         {
             // TODO check is it allowed by piece type, and defending king
-            Piece enemyPiece = boardLayout.Board[destinationSquare.X, destinationSquare.Y];
+            Piece enemyPiece = board.Layout[destinationSquare.X, destinationSquare.Y];
             if (enemyPiece != null)
                 MoveAndCapture(destinationSquare, enemyPiece);
             else
@@ -64,6 +65,8 @@ namespace Assets.Scripts.Model
             Deselect();
             piece.SetIsSelected(true);
             selectedPiece = piece;
+            List<MoveCommand> availableMoves = MovingService.AvailableMoves(piece, board);
+            board.SetAvailableMoves(availableMoves);
         }
 
         private void Deselect()
@@ -72,6 +75,7 @@ namespace Assets.Scripts.Model
             {
                 selectedPiece.SetIsSelected(false);
                 selectedPiece = null;
+                board.SetAvailableMoves(new List<MoveCommand>());
             }
         }
 

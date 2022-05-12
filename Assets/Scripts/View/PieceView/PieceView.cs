@@ -8,8 +8,8 @@ namespace Assets.Scripts.View
     class PieceView : MonoBehaviour, IPieceObserver
     {
         private MeshRenderer meshRenderer;
-        private Color originaMateriallColor;
         private BoardView boardView;
+        private Color originaMateriallColor;
         public PieceType PieceType;
 
         private void Awake()

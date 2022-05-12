@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace Assets.Scripts.Model
 {
     public class Vector2Integer: IEquatable<Vector2Integer>
@@ -21,5 +22,14 @@ namespace Assets.Scripts.Model
         {
             return String.Format("({0}, {1})", this.X, this.Y);
         }
+
+        public static Vector2Integer operator +(Vector2Integer a, Vector2Integer b)
+            => new Vector2Integer(a.X + b.X, a.Y + b.Y);
+
+        public static Vector2Integer operator -(Vector2Integer a, Vector2Integer b)
+            => new Vector2Integer(a.X - b.X, a.Y - b.Y);
+
+        public static Vector2Integer operator *(Vector2Integer a, int factor)
+            => new Vector2Integer(a.X * factor, a.Y * factor);
     }
 }

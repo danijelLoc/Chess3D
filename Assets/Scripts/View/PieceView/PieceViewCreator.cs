@@ -6,17 +6,18 @@ using Assets.Scripts.Model;
 
 namespace Assets.Scripts.View
 {
-    class ViewCreator : MonoBehaviour
+    class PieceViewCreator : MonoBehaviour
     {
         [SerializeField] private PieceView[] piecesPrefabs;
         [SerializeField] private Material whitePieceMaterial;
         [SerializeField] private Material blackPieceMaterial;
-        [SerializeField] private BoardView boardView;
+        private BoardView boardView;
         private Dictionary<Team, Material> teamToMaterial = new Dictionary<Team, Material>();
         private Dictionary<PieceType, PieceView> pieceTypeToPrefab = new Dictionary<PieceType, PieceView>();
 
         private void Awake()
         {
+            boardView = GetComponent<BoardView>();
             teamToMaterial.Add(Team.Black, blackPieceMaterial);
             teamToMaterial.Add(Team.White, whitePieceMaterial);
             foreach (var piecePrefab in piecesPrefabs)
@@ -31,6 +32,7 @@ namespace Assets.Scripts.View
             PieceView newPiece = Instantiate(piecePrefab);
             newPiece.SetMaterial(teamToMaterial[piece.Team]);
             newPiece.SetBoard(boardView);
+            newPiece.transform.localPosition = boardView.PositionFromSquareLocation(piece.CurrentSquare);
             piece.observer = newPiece;
             return newPiece;
         }
