@@ -1,8 +1,7 @@
-using System;
 using UnityEngine;
 
-//[RequireComponent(typeof(BoxCollider))]
-public class BoardMouseClickReceiver : MonoBehaviour
+[RequireComponent(typeof(BoxCollider))]
+public class BoardMouseClickReceiver : MonoBehaviour, IMouseClickReceiver
 { 
     protected IMouseClickHandler[] clickHandlers;
     protected BoxCollider targetBoxCollider;
@@ -21,6 +20,7 @@ public class BoardMouseClickReceiver : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit))
             {
+                // if player click on upper side of board
                 if (hit.collider == targetBoxCollider &&
                     hit.point.y >= targetBoxCollider.bounds.max.y - 1e-4) 
                     OnInputRecieved(hit.point);

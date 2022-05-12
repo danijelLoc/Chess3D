@@ -1,7 +1,6 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public interface IMouseClickReceiver
 {
-    void OnInputRecieved();
+    void OnInputRecieved(Vector3 clickPosition);
 }
