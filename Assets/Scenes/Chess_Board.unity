@@ -891,6 +891,7 @@ MonoBehaviour:
   - {fileID: 6701121372468728792, guid: 0a349cd5fb8f54a608200044150fdeb8, type: 3}
   whitePieceMaterial: {fileID: 2100000, guid: a3e9a6e1569d842a684694318c91552c, type: 2}
   blackPieceMaterial: {fileID: 2100000, guid: 7456a8e266d7b8a66878f5438d7298f1, type: 2}
+  boardView: {fileID: 6777656233896331397}
 --- !u!1 &1515502050
 GameObject:
   m_ObjectHideFlags: 0
@@ -900,7 +901,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1515502051}
-  - component: {fileID: 1515502052}
   m_Layer: 0
   m_Name: Game Master
   m_TagString: Untagged
@@ -923,18 +923,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1515502052
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1515502050}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21e0558cdc9ae41baa8dc984776d1ad9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1865688689
 GameObject:
   m_ObjectHideFlags: 0
@@ -950,7 +938,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1865688690
 Transform:
   m_ObjectHideFlags: 0
@@ -997,7 +985,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1965132619
 Transform:
   m_ObjectHideFlags: 0

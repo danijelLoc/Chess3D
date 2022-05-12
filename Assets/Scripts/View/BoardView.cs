@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using Assets.Scripts.Model;
 
 namespace Assets.Scripts.View
 {
@@ -30,6 +30,20 @@ namespace Assets.Scripts.View
         void Update()
         {
 
+        }
+
+        public Vector2Integer SquareLocationFromPosition(Vector3 position)
+        {
+            int x = Mathf.FloorToInt((transform.InverseTransformPoint(position).x + Width / 2) / SquareWidth);
+            int y = Mathf.FloorToInt((transform.InverseTransformPoint(position).z + Width / 2) / SquareWidth);
+            return new Vector2Integer(x, y);
+        }
+
+        public Vector3 PositionFromSquareLocation(Vector2Integer squareLocation)
+        {
+            return bottomLeftSquare.position +
+                new Vector3(squareLocation.X * SquareWidth,
+                            0f, squareLocation.Y * SquareWidth);
         }
     }
 }

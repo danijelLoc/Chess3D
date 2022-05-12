@@ -11,6 +11,7 @@ namespace Assets.Scripts.View
         [SerializeField] private PieceView[] piecesPrefabs;
         [SerializeField] private Material whitePieceMaterial;
         [SerializeField] private Material blackPieceMaterial;
+        [SerializeField] private BoardView boardView;
         private Dictionary<Team, Material> teamToMaterial = new Dictionary<Team, Material>();
         private Dictionary<PieceType, PieceView> pieceTypeToPrefab = new Dictionary<PieceType, PieceView>();
 
@@ -20,7 +21,7 @@ namespace Assets.Scripts.View
             teamToMaterial.Add(Team.White, whitePieceMaterial);
             foreach (var piecePrefab in piecesPrefabs)
             {
-                pieceTypeToPrefab.Add(piecePrefab.GetComponent<PieceView>().PieceType, piecePrefab);
+                pieceTypeToPrefab.Add(piecePrefab.PieceType, piecePrefab);
             }
         }
 
@@ -29,6 +30,8 @@ namespace Assets.Scripts.View
             PieceView piecePrefab = pieceTypeToPrefab[piece.Type];
             PieceView newPiece = Instantiate(piecePrefab);
             newPiece.SetMaterial(teamToMaterial[piece.Team]);
+            newPiece.SetBoard(boardView);
+            piece.observer = newPiece;
             return newPiece;
         }
     }

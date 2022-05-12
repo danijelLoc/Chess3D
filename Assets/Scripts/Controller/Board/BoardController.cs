@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using System;
 using Assets.Scripts.Model;
 using Assets.Scripts.View;
@@ -9,39 +9,44 @@ namespace Assets.Scripts.Controller
     public class BoardController : MonoBehaviour, IMouseClickHandler
     {
         private BoardView boardView;
+        private GameManager gameManager;
         [SerializeField] private ViewCreator viewCreator;
+
 
         private void Awake()
         {
             boardView = GetComponent<BoardView>();
-            AddPiecesToBoard();
         }
 
-        private void AddPiecesToBoard()
+        private void Start()
         {
-            Piece king = new Piece(PieceType.King, Team.White, new Vector2Integer(3, 3));
-            PieceView kingView = viewCreator.CreatePieceView(king);
-            kingView.transform.localPosition = PositionFromSquareLocation(king.CurrentSquare);
+            InitialLayout();
         }
 
         public void ProcessInput(Vector3 inputPosition, GameObject selectedObject, Action onClick)
         {
-            Vector2Integer squareLocation = SquareLocationFromPosition(inputPosition);
-            Debug.Log(squareLocation);
+            Vector2Integer squareLocation = boardView.SquareLocationFromPosition(inputPosition);
+            gameManager.OnSquareSelected(squareLocation);
         }
 
-        public Vector2Integer SquareLocationFromPosition(Vector3 position)
+        public void ShowLayout(BoardLayout boardLayout)
         {
-            int x = Mathf.FloorToInt((transform.InverseTransformPoint(position).x + boardView.Width / 2) / boardView.SquareWidth);
-            int y = Mathf.FloorToInt((transform.InverseTransformPoint(position).z + boardView.Width / 2) / boardView.SquareWidth);
-            return new Vector2Integer(x, y);
+            foreach (Piece piece in boardLayout.pieces)
+            {
+                PieceView pieceView = viewCreator.CreatePieceView(piece);
+                pieceView.transform.localPosition = boardView.PositionFromSquareLocation(piece.CurrentSquare);
+                //pieceView.enabled = piece.Destoryed;
+            }
         }
 
-        public Vector3 PositionFromSquareLocation(Vector2Integer squareLocation)
+        private void InitialLayout()
         {
-            return boardView.bottomLeftSquare.position +
-                new Vector3(squareLocation.X * boardView.SquareWidth,
-                            0f, squareLocation.Y * boardView.SquareWidth);
+            Piece king = new Piece(PieceType.King, Team.Black, new Vector2Integer(2, 4));
+            Piece pawn = new Piece(PieceType.Pawn, Team.White, new Vector2Integer(1, 1));
+            List<Piece> pieces = new List<Piece> { king, pawn };
+            BoardLayout boardLayout = new BoardLayout(pieces);
+            gameManager = new GameManager(boardLayout);
+            ShowLayout(boardLayout);
         }
     }
 }
