@@ -2,7 +2,8 @@
 
 namespace Assets.Scripts.Model
 {
-    public class NewClass
+    public class BoardLayout
     {
+        public Piece[] pieces;
     }
 }

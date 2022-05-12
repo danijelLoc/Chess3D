@@ -3,9 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts.Model;
-using Assets.Scripts.View;
 
-namespace Assets.Scripts.Controller
+namespace Assets.Scripts.View
 {
     class ViewCreator : MonoBehaviour
     {
@@ -13,23 +12,24 @@ namespace Assets.Scripts.Controller
         [SerializeField] private Material whitePieceMaterial;
         [SerializeField] private Material blackPieceMaterial;
         private Dictionary<Team, Material> teamToMaterial = new Dictionary<Team, Material>();
-        private Dictionary<PieceType, PieceView> pieceTypeToGameObject = new Dictionary<PieceType, PieceView>();
+        private Dictionary<PieceType, PieceView> pieceTypeToPrefab = new Dictionary<PieceType, PieceView>();
 
         private void Awake()
         {
             teamToMaterial.Add(Team.Black, blackPieceMaterial);
             teamToMaterial.Add(Team.White, whitePieceMaterial);
-            foreach (var piece in piecesPrefabs)
+            foreach (var piecePrefab in piecesPrefabs)
             {
-                pieceTypeToGameObject.Add(piece.GetComponent<PieceType>(), piece);
+                pieceTypeToPrefab.Add(piecePrefab.GetComponent<PieceView>().PieceType, piecePrefab);
             }
         }
 
-        public PieceView createPieceGameObject(Piece piece)
+        public PieceView CreatePieceView(Piece piece)
         {
-            PieceView pieceGameObject = pieceTypeToGameObject[piece.Type];
-            pieceGameObject.SetMaterial(teamToMaterial[piece.Team]);
-            return pieceGameObject;
+            PieceView piecePrefab = pieceTypeToPrefab[piece.Type];
+            PieceView newPiece = Instantiate(piecePrefab);
+            newPiece.SetMaterial(teamToMaterial[piece.Team]);
+            return newPiece;
         }
     }
 }

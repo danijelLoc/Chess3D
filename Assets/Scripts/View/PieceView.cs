@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Assets.Scripts.Model;
 
 namespace Assets.Scripts.View
 {
@@ -9,6 +10,16 @@ namespace Assets.Scripts.View
     {
         private MeshRenderer meshRenderer;
         private Transform _transform;
+        [SerializeField] private PieceType pieceType;
+        public PieceType PieceType
+        {
+            get { return pieceType; }
+            set
+            {
+// TODO change mesh
+                pieceType = value;
+            }
+        }
 
         private void Awake()
         {

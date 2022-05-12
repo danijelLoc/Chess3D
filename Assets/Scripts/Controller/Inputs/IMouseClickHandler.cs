@@ -1,7 +1,10 @@
 ﻿using System;
 using UnityEngine;
 
-public interface IMouseClickHandler
+namespace Assets.Scripts.Controller
 {
-    void ProcessInput(Vector3 inputPosition, GameObject selectedObject, Action onClick);
+    public interface IMouseClickHandler
+    {
+        void ProcessInput(Vector3 inputPosition, GameObject selectedObject, Action onClick);
+    }
 }

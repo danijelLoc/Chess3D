@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-public interface IMouseClickReceiver
+namespace Assets.Scripts.Controller
 {
-    void OnInputRecieved(Vector3 clickPosition);
+    public interface IMouseClickReceiver
+    {
+        void OnInputRecieved(Vector3 clickPosition);
+    }
 }

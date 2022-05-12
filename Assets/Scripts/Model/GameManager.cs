@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts.Model
 {
-    public class BoardInteractionManager
+    public class GameManager
     {
     }
 }
