@@ -6,22 +6,6 @@ namespace Assets.Scripts.Model
 {
     public class MovingService
     {
-        private static readonly List<Vector2Integer> diagonalDirections = new List<Vector2Integer> {
-                new Vector2Integer(1, 1), new Vector2Integer(-1, -1),
-                new Vector2Integer(1, -1), new Vector2Integer(-1, 1)
-        };
-
-        private static readonly List<Vector2Integer> lineDirections = new List<Vector2Integer> {
-                new Vector2Integer(0, 1), new Vector2Integer(0, -1),
-                new Vector2Integer(1, 0), new Vector2Integer(-1, 0)
-        };
-
-        private static readonly List<Vector2Integer> knightDirections = new List<Vector2Integer> {
-                new Vector2Integer(2,1), new Vector2Integer(2,-1),
-                new Vector2Integer(-2,1), new Vector2Integer(-2,-1),
-                new Vector2Integer(1,2), new Vector2Integer(1,-2),
-                new Vector2Integer(-1,2), new Vector2Integer(-1,-2),
-        };
 
         public static List<MoveCommand> AvailableMoves(Piece piece, Board biard)
         {
@@ -47,31 +31,31 @@ namespace Assets.Scripts.Model
 
         private static List<MoveCommand> RookAvailableMoves(Piece selectedPiece, Board board)
         {
-            return ContinuousMoves(lineDirections, selectedPiece, board, Board.SquaresInRow);
+            return MovingUtils.ContinuousMoves(MovingUtils.lineDirections, selectedPiece, board, Board.SquaresInRow);
         }
 
         private static List<MoveCommand> BishopAvailableMoves(Piece selectedPiece, Board board)
         {
-            return ContinuousMoves(diagonalDirections, selectedPiece, board, Board.SquaresInRow);
+            return MovingUtils.ContinuousMoves(MovingUtils.diagonalDirections, selectedPiece, board, Board.SquaresInRow);
         }
 
         private static List<MoveCommand> QueenAvailableMoves(Piece selectedPiece, Board board)
         {
-            List<MoveCommand> diagonalMoves = ContinuousMoves(diagonalDirections, selectedPiece, board, Board.SquaresInRow);
-            List<MoveCommand> lineMoves = ContinuousMoves(lineDirections, selectedPiece, board, Board.SquaresInRow);
+            List<MoveCommand> diagonalMoves = MovingUtils.ContinuousMoves(MovingUtils.diagonalDirections, selectedPiece, board, Board.SquaresInRow);
+            List<MoveCommand> lineMoves = MovingUtils.ContinuousMoves(MovingUtils.lineDirections, selectedPiece, board, Board.SquaresInRow);
             diagonalMoves.AddRange(lineMoves);
             return diagonalMoves;
         }
 
         private static List<MoveCommand> KingAvailableMoves(Piece selectedPiece, Board board)
         {
-            return ContinuousMoves(lineDirections, selectedPiece, board, 1);
+            return MovingUtils.ContinuousMoves(MovingUtils.lineDirections, selectedPiece, board, 1);
         }
 
         private static List<MoveCommand> KnightAvailableMoves(Piece selectedPiece, Board board)
         {
             List<MoveCommand> moves = new List<MoveCommand>();
-            foreach (var direction in knightDirections)
+            foreach (var direction in MovingUtils.knightDirections)
             {
                 Vector2Integer potentialSquare = selectedPiece.CurrentSquare + direction;
                 Piece pieceOnPotentialSquare = board.Layout[potentialSquare.X, potentialSquare.Y];
@@ -95,42 +79,36 @@ namespace Assets.Scripts.Model
             return moves;
         }
 
-        private static List<MoveCommand> ContinuousMoves(List<Vector2Integer> directions, Piece selectedPiece, Board board, int range)
+        private static List<MoveCommand> PawnAvailableMoves(Piece selectedPawn, Board board)
         {
             List<MoveCommand> moves = new List<MoveCommand>();
 
-            foreach (var direction in directions)
-            {
-                for (int i = 1; i <= range; i++)
+            // advance
+            Vector2Integer direction = MovingUtils.PawnLineDirection(selectedPawn.Team);
+            var lineAdvanceMoves = MovingUtils.ContinuousMoves(new List<Vector2Integer> { direction }, selectedPawn,
+                board, selectedPawn.MoveCounter == 0 ? 2 : 1);
+            moves.AddRange(lineAdvanceMoves);
+
+            // atack
+            List<Vector2Integer> attackDirections = MovingUtils.PawnAttackDirections(selectedPawn.Team);
+            foreach (var attackDirection in attackDirections) {
+                Vector2Integer destination = selectedPawn.CurrentSquare + attackDirection;
+                Piece pieceToCapture = board.Layout[destination.X, destination.Y];
+                Piece pieceNextTo = board.Layout[destination.X, selectedPawn.CurrentSquare.Y];
+                // pieceToCaptureEnPassant
+                if (pieceNextTo != null && pieceNextTo.MoveCounter == 1 && pieceNextTo.CurrentSquare.Y == MovingUtils.PawnTwoSquareAdvanceYLocation(pieceNextTo.Team))
                 {
-                    Vector2Integer potentialSquare = selectedPiece.CurrentSquare + direction * i;
-                    Piece pieceOnPotentialSquare = board.Layout[potentialSquare.X, potentialSquare.Y];
-                    if (!Board.IsSquareInsideBoard(potentialSquare))
-                        break;
-                    if (pieceOnPotentialSquare == null)
-                    {
-                        // TODO undo, start changes maybe
-                        MoveCommand move = new MoveCommand(selectedPiece, selectedPiece.CurrentSquare, null, potentialSquare);
-                        moves.Add(move);
-                    }
-                    else if (pieceOnPotentialSquare.Team != selectedPiece.Team)
-                    {
-                        // TODO check king shielding
-                        MoveCommand move = new MoveCommand(selectedPiece, selectedPiece.CurrentSquare, pieceOnPotentialSquare, potentialSquare);
-                        moves.Add(move);
-                        break;
-                    }
-                    else if (pieceOnPotentialSquare.Team == selectedPiece.Team)
-                        break;
+                    // TODO turn right after two square advance only
+                    var enPassant = new MoveCommand(selectedPawn, selectedPawn.CurrentSquare, pieceNextTo, destination);
+                    moves.Add(enPassant);
+                }
+                if (pieceToCapture != null)
+                {
+                    moves.Add(new MoveCommand(selectedPawn, selectedPawn.CurrentSquare, pieceToCapture, destination));
                 }
             }
-            return moves;
-        }
 
-        private static List<MoveCommand> PawnAvailableMoves(Piece selectedPiece, Board board)
-        {
-            // TODO check if is shielding King
-            return new List<MoveCommand>();
+            return moves;
         }
     }
 }

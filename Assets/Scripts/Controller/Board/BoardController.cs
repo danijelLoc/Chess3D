@@ -40,13 +40,40 @@ namespace Assets.Scripts.Controller
 
         private void InitialLayout()
         {
-            Piece king = new Piece(PieceType.King, Team.Black, new Vector2Integer(2, 4));
-            Piece pawn = new Piece(PieceType.Pawn, Team.White, new Vector2Integer(1, 1));
-            List<Piece> pieces = new List<Piece> { king, pawn };
+            // TODO from file
+            List<Piece> pieces = new List<Piece>();
+            pieces.AddRange(CreateTeam(Team.White));
+            pieces.AddRange(CreateTeam(Team.Black));
             Board board = new Board(pieces);
             board.boardMarkersObserver = boardView;
             gameManager = new GameManager(board);
             ShowLayout(board);
+        }
+
+        private List<Piece> CreateTeam(Team team)
+        {
+            List<Piece> pieces = new List<Piece>();
+            int firstRowY = team == Team.White ? 0 : 7;
+            int secondRowY = team == Team.White ? 1 : 6;
+
+            pieces.Add(new Piece(PieceType.King, team, new Vector2Integer(4, firstRowY)));
+            pieces.Add(new Piece(PieceType.Queen, team, new Vector2Integer(3, firstRowY)));
+            pieces.Add(new Piece(PieceType.Rook, team, new Vector2Integer(0, firstRowY)));
+            pieces.Add(new Piece(PieceType.Rook, team, new Vector2Integer(7, firstRowY)));
+            pieces.Add(new Piece(PieceType.Knight, team, new Vector2Integer(1, firstRowY)));
+            pieces.Add(new Piece(PieceType.Knight, team, new Vector2Integer(6, firstRowY)));
+            pieces.Add(new Piece(PieceType.Bishop, team, new Vector2Integer(2, firstRowY)));
+            pieces.Add(new Piece(PieceType.Bishop, team, new Vector2Integer(5, firstRowY)));
+            pieces.Add(new Piece(PieceType.Pawn, team, new Vector2Integer(0, secondRowY)));
+            pieces.Add(new Piece(PieceType.Pawn, team, new Vector2Integer(1, secondRowY)));
+            pieces.Add(new Piece(PieceType.Pawn, team, new Vector2Integer(2, secondRowY)));
+            pieces.Add(new Piece(PieceType.Pawn, team, new Vector2Integer(3, secondRowY)));
+            pieces.Add(new Piece(PieceType.Pawn, team, new Vector2Integer(4, secondRowY)));
+            pieces.Add(new Piece(PieceType.Pawn, team, new Vector2Integer(5, secondRowY)));
+            pieces.Add(new Piece(PieceType.Pawn, team, new Vector2Integer(6, secondRowY)));
+            pieces.Add(new Piece(PieceType.Pawn, team, new Vector2Integer(7, secondRowY)));
+
+            return pieces;
         }
     }
 }

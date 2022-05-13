@@ -3145,7 +3145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a941773625aa42b6ba0193fe3cf63f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  freeSquareColor: {r: 0.088943385, g: 0.254717, b: 0.078097194, a: 0}
+  freeSquareColor: {r: 0.1864839, g: 0.6603774, b: 0.15263441, a: 0}
   enemySquareColor: {r: 0.4811321, g: 0.14297792, b: 0.14297792, a: 0}
   squareMarkerMaterial: {fileID: 2100000, guid: a3e9a6e1569d842a684694318c91552c, type: 2}
   squareMarkerPrefab: {fileID: 3980441934984475872, guid: a50069d31362648d2b92c213600191c9, type: 3}

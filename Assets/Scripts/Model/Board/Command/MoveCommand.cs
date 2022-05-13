@@ -5,7 +5,7 @@ namespace Assets.Scripts.Model
     {
         public Piece SelectedPiece { get; private set; }
         public Vector2Integer StartSquareLocation { get; private set; }
-
+        
         public Piece PieceToBeCaptured { get; private set; }
         public Vector2Integer EndSquareLocation { get; private set; }
 
@@ -17,14 +17,16 @@ namespace Assets.Scripts.Model
             this.EndSquareLocation = endSquareLocation;
         }
 
-        public void Do()
+        public virtual void Do()
         {
-            throw new NotImplementedException();
+            SelectedPiece.MoveTo(EndSquareLocation);
+            PieceToBeCaptured?.SetIsAlive(false);
         }
 
-        public void Undo()
+        public virtual void Undo()
         {
-            throw new NotImplementedException();
+            SelectedPiece.MoveTo(StartSquareLocation, true);
+            PieceToBeCaptured?.SetIsAlive(true);
         }
     }
 }

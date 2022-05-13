@@ -9,6 +9,7 @@ namespace Assets.Scripts.Model
         public PieceType Type { get; private set; }
         public Team Team { get; private set; }
         public Vector2Integer CurrentSquare { get; private set; }
+        public int MoveCounter { get; private set; }
         public Boolean IsAlive { get; private set; }
         public Boolean Selected { get; private set; }
 
@@ -21,6 +22,7 @@ namespace Assets.Scripts.Model
             this.CurrentSquare = currentSquare;
             this.Selected = false;
             this.IsAlive = isAlive;
+            this.MoveCounter = 0;
         }
 
         public override int GetHashCode()
@@ -47,16 +49,26 @@ namespace Assets.Scripts.Model
             observer?.UpdateSelection(isSelected);
         }
 
+        public void SetType(PieceType type)
+        {
+            Type = type;
+            observer?.UpdatePieceType(type);
+        }
+
         public void SetIsAlive(Boolean isAlive)
         {
             IsAlive = isAlive;
             observer?.UpdateIsAlive(isAlive);
         }
 
-        public void MoveTo(Vector2Integer destinationSquare)
+        public void MoveTo(Vector2Integer destinationSquare, Boolean isUndo = false)
         {
             CurrentSquare = destinationSquare;
             observer?.UpdateSquareLocation(destinationSquare);
+            if (isUndo)
+                MoveCounter--;
+            else
+                MoveCounter++;
         }
     }
 }
