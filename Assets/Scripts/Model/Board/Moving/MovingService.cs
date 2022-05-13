@@ -112,7 +112,16 @@ namespace Assets.Scripts.Model
                 }
             }
 
-            return moves;
+            List<MoveCommand> movesCheckedForPromotion = new List<MoveCommand>();
+            foreach (var move in moves)
+            {
+                if (move.EndSquareLocation.Y == MovingUtils.PawnPromotionYLocation(move.SelectedPiece.Team))
+                    movesCheckedForPromotion.Add(new PromotionCommand(move.SelectedPiece, move.StartSquareLocation, move.PieceToBeCaptured, move.EndSquareLocation));
+                else
+                    movesCheckedForPromotion.Add(move);
+            }
+
+            return movesCheckedForPromotion;
         }
     }
 }

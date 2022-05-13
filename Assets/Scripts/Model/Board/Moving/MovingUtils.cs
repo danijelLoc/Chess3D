@@ -58,6 +58,22 @@ namespace Assets.Scripts.Model
             return moves;
         }
 
+        public static Piece FirstPieceInDirection (Vector2Integer direction, Piece selectedPiece, Board board)
+        {
+            int i = 1;
+            while (true) {
+                Vector2Integer potentialSquare = selectedPiece.CurrentSquare + direction * i;
+                if (!Board.IsSquareInsideBoard(potentialSquare))
+                    break;
+
+                var firstPiece = board.Layout[potentialSquare.X, potentialSquare.Y];
+                if (firstPiece != null)
+                    return firstPiece;
+                i++;
+            }
+            return null;
+        }
+
         public static int PawnYDirection(Team team)
         {
             return team == Team.White ? 1 : -1;
@@ -76,6 +92,11 @@ namespace Assets.Scripts.Model
         public static int PawnTwoSquareAdvanceYLocation(Team team)
         {
             return team == Team.White ? 3 : 4;
+        }
+
+        public static int PawnPromotionYLocation(Team team)
+        {
+            return team == Team.White ? 7 : 0;
         }
     }
 }

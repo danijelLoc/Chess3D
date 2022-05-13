@@ -9,6 +9,7 @@ namespace Assets.Scripts.View
     {
         private MeshRenderer meshRenderer;
         private BoardView boardView;
+        private PieceViewCreator pieceViewCreator;
         private Color originaMateriallColor;
         public PieceType PieceType;
 
@@ -28,6 +29,11 @@ namespace Assets.Scripts.View
             this.boardView = boardView;
         }
 
+        public void SetPieceViewCreator(PieceViewCreator pieceViewCreator)
+        {
+            this.pieceViewCreator = pieceViewCreator;
+        }
+
         public void UpdateSelection(Boolean selected)
         {
             meshRenderer.material.color = selected ? Color.green : originaMateriallColor;
@@ -35,7 +41,20 @@ namespace Assets.Scripts.View
 
         public void UpdatePieceType(PieceType newType)
         {
-            //TODO
+            MeshFilter newMesh;
+            if (newType == PieceType.Queen)
+            {
+                newMesh = pieceViewCreator.queenMeshFilter;
+            }
+            else if (newType == PieceType.Queen)
+            {
+                newMesh = pieceViewCreator.pawnMeshFilter;
+            }
+            else
+                throw new NotImplementedException();
+            MeshFilter current = GetComponent(typeof(MeshFilter)) as MeshFilter;
+            current.mesh = Instantiate(newMesh.mesh) as Mesh;
+
         }
 
         public void UpdateSquareLocation(Vector2Integer newSquareLocation)

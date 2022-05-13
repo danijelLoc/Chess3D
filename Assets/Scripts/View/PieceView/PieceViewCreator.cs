@@ -11,6 +11,8 @@ namespace Assets.Scripts.View
         [SerializeField] private PieceView[] piecesPrefabs;
         [SerializeField] private Material whitePieceMaterial;
         [SerializeField] private Material blackPieceMaterial;
+        public MeshFilter queenMeshFilter;
+        public MeshFilter pawnMeshFilter;
         private BoardView boardView;
         private Dictionary<Team, Material> teamToMaterial = new Dictionary<Team, Material>();
         private Dictionary<PieceType, PieceView> pieceTypeToPrefab = new Dictionary<PieceType, PieceView>();
@@ -32,6 +34,7 @@ namespace Assets.Scripts.View
             PieceView newPiece = Instantiate(piecePrefab);
             newPiece.SetMaterial(teamToMaterial[piece.Team]);
             newPiece.SetBoard(boardView);
+            newPiece.SetPieceViewCreator(this);
             newPiece.transform.localPosition = boardView.PositionFromSquareLocation(piece.CurrentSquare);
             piece.observer = newPiece;
             return newPiece;

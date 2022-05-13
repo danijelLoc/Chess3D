@@ -3133,6 +3133,8 @@ MonoBehaviour:
   - {fileID: 5249378403862095211, guid: 0a349cd5fb8f54a608200044150fdeb8, type: 3}
   whitePieceMaterial: {fileID: 2100000, guid: c4309d4054978f93fb08657b9b52c8db, type: 2}
   blackPieceMaterial: {fileID: 2100000, guid: 7456a8e266d7b8a66878f5438d7298f1, type: 2}
+  queenMeshFilter: {fileID: 7281697602634654898}
+  pawnMeshFilter: {fileID: 964917707917785299}
 --- !u!114 &6777656233896331403
 MonoBehaviour:
   m_ObjectHideFlags: 0
