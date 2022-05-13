@@ -23,9 +23,14 @@ namespace Assets.Scripts.Model
                 new Vector2Integer(-1,2), new Vector2Integer(-1,-2),
         };
 
-        public static List<MoveCommand> ContinuousMoves(List<Vector2Integer> directions, Piece selectedPiece, Board board, int range, bool withAttack = true)
+        public static int LeftCastlingKingXLocation = 2;
+        public static int LeftCastlingRookXLocation = 3;
+        public static int RightCastlingKingXLocation = 6;
+        public static int RightCastlingRookXLocation = 5;
+
+        public static List<ICommand> ContinuousMoves(List<Vector2Integer> directions, Piece selectedPiece, Board board, int range, bool withAttack = true)
         {
-            List<MoveCommand> moves = new List<MoveCommand>();
+            List<ICommand> moves = new List<ICommand>();
 
             foreach (var direction in directions)
             {

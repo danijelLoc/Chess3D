@@ -6,7 +6,7 @@ namespace Assets.Scripts.Model
     public class GameManager
     {
         private Piece selectedPiece;
-        private List<MoveCommand> selectedPieceAvailableMoves;
+        private List<ICommand> selectedPieceAvailableMoves;
         private Board board;
         private Team currentTeam;
 
@@ -37,7 +37,7 @@ namespace Assets.Scripts.Model
 
         private void TryToMoveSelectedPiece(Vector2Integer destinationSquare)
         {
-            MoveCommand availableCommand = AvailableMoveForDestinationSquare(destinationSquare);
+            ICommand availableCommand = AvailableMoveForDestinationSquare(destinationSquare);
             if (availableCommand != null)
             {
                 availableCommand.Do();
@@ -46,11 +46,11 @@ namespace Assets.Scripts.Model
             }
         }
 
-        private MoveCommand AvailableMoveForDestinationSquare(Vector2Integer destinationSquare)
+        private ICommand AvailableMoveForDestinationSquare(Vector2Integer destinationSquare)
         {
             foreach (var move in selectedPieceAvailableMoves)
             {
-                if (move.EndSquareLocation.Equals(destinationSquare))
+                if (move.SquareClicked().Equals(destinationSquare))
                     return move;
             }
             return null;
@@ -71,7 +71,7 @@ namespace Assets.Scripts.Model
             {
                 selectedPiece.SetIsSelected(false);
                 selectedPiece = null;
-                board.SetAvailableMoves(new List<MoveCommand>());
+                board.SetAvailableMoves(new List<ICommand>());
             }
         }
 

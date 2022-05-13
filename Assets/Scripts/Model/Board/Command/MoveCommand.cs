@@ -3,7 +3,7 @@ namespace Assets.Scripts.Model
 {
     public class MoveCommand : ICommand
     {
-        public Piece SelectedPiece { get; private set; }
+        public Piece SelectedPiece { get; private set; } 
         public Vector2Integer StartSquareLocation { get; private set; }
         
         public Piece PieceToBeCaptured { get; private set; }
@@ -27,6 +27,11 @@ namespace Assets.Scripts.Model
         {
             SelectedPiece.MoveTo(StartSquareLocation, true);
             PieceToBeCaptured?.SetIsAlive(true);
+        }
+
+        public Vector2Integer SquareClicked()
+        {
+            return EndSquareLocation;
         }
     }
 }

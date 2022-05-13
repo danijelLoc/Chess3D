@@ -31,12 +31,13 @@ namespace Assets.Scripts.Model
             return 0 <= square.X && square.X < SquaresInRow && 0 <= square.Y && square.Y < SquaresInRow;
         }
 
-        internal void SetAvailableMoves(List<MoveCommand> availableMoves)
+        internal void SetAvailableMoves(List<ICommand> availableMoves)
         {
             List<SquareMarker> markers = new List<SquareMarker>();
             foreach (var command in availableMoves)
             {
-                markers.Add(new SquareMarker(command.EndSquareLocation, command.PieceToBeCaptured != null ? SquareMarkerType.Enemy : SquareMarkerType.Free));
+                markers.Add(new SquareMarker(command.SquareClicked(), Layout[command.SquareClicked().X, command.SquareClicked().Y] != null ?
+                    SquareMarkerType.Enemy : SquareMarkerType.Free));
             }
             boardMarkersObserver?.UpdateAvailableMovesMarkers(markers);
         }

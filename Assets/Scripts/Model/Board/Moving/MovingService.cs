@@ -7,7 +7,7 @@ namespace Assets.Scripts.Model
     public class MovingService
     {
 
-        public static List<MoveCommand> AvailableMoves(Piece piece, Board biard)
+        public static List<ICommand> AvailableMoves(Piece piece, Board biard)
         {
             switch (piece.Type)
             {
@@ -28,35 +28,78 @@ namespace Assets.Scripts.Model
             }
         }
 
-        private static List<MoveCommand> RookAvailableMoves(Piece selectedPiece, Board board)
+        private static List<ICommand> RookAvailableMoves(Piece selectedPiece, Board board)
         {
             return MovingUtils.ContinuousMoves(MovingUtils.lineDirections, selectedPiece, board, Board.SquaresInRow);
         }
 
-        private static List<MoveCommand> BishopAvailableMoves(Piece selectedPiece, Board board)
+        private static List<ICommand> BishopAvailableMoves(Piece selectedPiece, Board board)
         {
             return MovingUtils.ContinuousMoves(MovingUtils.diagonalDirections, selectedPiece, board, Board.SquaresInRow);
         }
 
-        private static List<MoveCommand> QueenAvailableMoves(Piece selectedPiece, Board board)
+        private static List<ICommand> QueenAvailableMoves(Piece selectedPiece, Board board)
         {
-            List<MoveCommand> diagonalMoves = MovingUtils.ContinuousMoves(MovingUtils.diagonalDirections, selectedPiece, board, Board.SquaresInRow);
-            List<MoveCommand> lineMoves = MovingUtils.ContinuousMoves(MovingUtils.lineDirections, selectedPiece, board, Board.SquaresInRow);
+            List<ICommand> diagonalMoves = MovingUtils.ContinuousMoves(MovingUtils.diagonalDirections, selectedPiece, board, Board.SquaresInRow);
+            List<ICommand> lineMoves = MovingUtils.ContinuousMoves(MovingUtils.lineDirections, selectedPiece, board, Board.SquaresInRow);
             diagonalMoves.AddRange(lineMoves);
             return diagonalMoves;
         }
 
-        private static List<MoveCommand> KingAvailableMoves(Piece selectedPiece, Board board)
+        private static List<ICommand> KingAvailableMoves(Piece selectedPiece, Board board)
         {
-            List<MoveCommand> diagonalMoves = MovingUtils.ContinuousMoves(MovingUtils.diagonalDirections, selectedPiece, board, 1);
-            List<MoveCommand> lineMoves = MovingUtils.ContinuousMoves(MovingUtils.lineDirections, selectedPiece, board, 1);
-            diagonalMoves.AddRange(lineMoves);
+            List<ICommand> diagonalMoves = MovingUtils.ContinuousMoves(MovingUtils.diagonalDirections, selectedPiece, board, 1);
+            List<ICommand> lineMoves = MovingUtils.ContinuousMoves(MovingUtils.lineDirections, selectedPiece, board, 1);
+
+            List<ICommand> lineMovesCheckedForCastling = new List<ICommand>();
+            foreach (MoveCommand move in lineMoves) {
+                var castlingCommand = GetCastlingCommand(move, board);
+                if (castlingCommand != null)
+                    lineMovesCheckedForCastling.Add(castlingCommand);
+                else
+                    lineMovesCheckedForCastling.Add(move);
+            }
+
+            diagonalMoves.AddRange(lineMovesCheckedForCastling);
             return diagonalMoves;
         }
 
-        private static List<MoveCommand> KnightAvailableMoves(Piece selectedPiece, Board board)
+        private static CastlingCommand GetCastlingCommand(MoveCommand move, Board board)
         {
-            List<MoveCommand> moves = new List<MoveCommand>();
+            Vector2Integer leftDirection = new Vector2Integer(1, 0);
+            Vector2Integer rightDirection = new Vector2Integer(-1, 0);
+            int firstRow = move.SelectedPiece.Team == Team.White ? 0 : 7;
+
+            var LeftCastlingKingLocation = new Vector2Integer(MovingUtils.LeftCastlingKingXLocation, firstRow);
+            var LeftCastlingRookLocation = new Vector2Integer(MovingUtils.LeftCastlingRookXLocation, firstRow);
+            var RightCastlingKingLocation = new Vector2Integer(MovingUtils.RightCastlingKingXLocation, firstRow);
+            var RightCastlingRookLocation = new Vector2Integer(MovingUtils.RightCastlingRookXLocation, firstRow);
+
+            // TODO cant castle under attack, also if new position is under attack, or if path between is under attack
+            var direction = move.EndSquareLocation - move.StartSquareLocation;
+            var firstPiece = MovingUtils.FirstPieceInDirection(direction, move.SelectedPiece, board);
+            if (move.SelectedPiece.MoveCounter == 0 && firstPiece.Type == PieceType.Rook &&
+                firstPiece.MoveCounter == 0 && move.StartSquareLocation.Y == firstRow && firstPiece.Team == move.SelectedPiece.Team)
+            {
+                // directly checking x cordinate because of possible quizz mode where rook is on different position but has 0 in move counter
+                if (direction.Equals(leftDirection) && firstPiece.CurrentSquare.X == 0)
+                {
+                    return new CastlingCommand(move.SelectedPiece, move.StartSquareLocation, LeftCastlingKingLocation,
+                        move.EndSquareLocation, firstPiece, firstPiece.CurrentSquare, LeftCastlingRookLocation);
+                }
+                else if (direction.Equals(leftDirection) && firstPiece.CurrentSquare.X == 7) {
+                    return new CastlingCommand(move.SelectedPiece, move.StartSquareLocation, RightCastlingKingLocation,
+                        move.EndSquareLocation, firstPiece, firstPiece.CurrentSquare, RightCastlingRookLocation);
+                }
+                    
+            }
+            return null;
+        }
+
+
+        private static List<ICommand> KnightAvailableMoves(Piece selectedPiece, Board board)
+        {
+            List<ICommand> moves = new List<ICommand>();
             foreach (var direction in MovingUtils.knightDirections)
             {
                 Vector2Integer potentialSquare = selectedPiece.CurrentSquare + direction;
@@ -80,9 +123,10 @@ namespace Assets.Scripts.Model
             return moves;
         }
 
-        private static List<MoveCommand> PawnAvailableMoves(Piece selectedPawn, Board board)
+
+        private static List<ICommand> PawnAvailableMoves(Piece selectedPawn, Board board)
         {
-            List<MoveCommand> moves = new List<MoveCommand>();
+            List<ICommand> moves = new List<ICommand>();
 
             // advance
             Vector2Integer direction = MovingUtils.PawnLineDirection(selectedPawn.Team);
@@ -112,8 +156,8 @@ namespace Assets.Scripts.Model
                 }
             }
 
-            List<MoveCommand> movesCheckedForPromotion = new List<MoveCommand>();
-            foreach (var move in moves)
+            List<ICommand> movesCheckedForPromotion = new List<ICommand>();
+            foreach (MoveCommand move in moves)
             {
                 if (move.EndSquareLocation.Y == MovingUtils.PawnPromotionYLocation(move.SelectedPiece.Team))
                     movesCheckedForPromotion.Add(new PromotionCommand(move.SelectedPiece, move.StartSquareLocation, move.PieceToBeCaptured, move.EndSquareLocation));
@@ -121,7 +165,7 @@ namespace Assets.Scripts.Model
                     movesCheckedForPromotion.Add(move);
             }
 
-            return movesCheckedForPromotion;
+            return (List<ICommand>)movesCheckedForPromotion;
         }
     }
 }
