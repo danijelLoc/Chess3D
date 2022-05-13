@@ -23,7 +23,7 @@ namespace Assets.Scripts.Model
                 new Vector2Integer(-1,2), new Vector2Integer(-1,-2),
         };
 
-        public static List<MoveCommand> ContinuousMoves(List<Vector2Integer> directions, Piece selectedPiece, Board board, int range)
+        public static List<MoveCommand> ContinuousMoves(List<Vector2Integer> directions, Piece selectedPiece, Board board, int range, bool withAttack = true)
         {
             List<MoveCommand> moves = new List<MoveCommand>();
 
@@ -32,9 +32,9 @@ namespace Assets.Scripts.Model
                 for (int i = 1; i <= range; i++)
                 {
                     Vector2Integer potentialSquare = selectedPiece.CurrentSquare + direction * i;
-                    Piece pieceOnPotentialSquare = board.Layout[potentialSquare.X, potentialSquare.Y];
                     if (!Board.IsSquareInsideBoard(potentialSquare))
                         break;
+                    Piece pieceOnPotentialSquare = board.Layout[potentialSquare.X, potentialSquare.Y];
                     if (pieceOnPotentialSquare == null)
                     {
                         // TODO undo, start changes maybe
@@ -44,8 +44,11 @@ namespace Assets.Scripts.Model
                     else if (pieceOnPotentialSquare.Team != selectedPiece.Team)
                     {
                         // TODO check king shielding
-                        MoveCommand move = new MoveCommand(selectedPiece, selectedPiece.CurrentSquare, pieceOnPotentialSquare, potentialSquare);
-                        moves.Add(move);
+                        if (withAttack)
+                        {
+                            MoveCommand move = new MoveCommand(selectedPiece, selectedPiece.CurrentSquare, pieceOnPotentialSquare, potentialSquare);
+                            moves.Add(move);
+                        }
                         break;
                     }
                     else if (pieceOnPotentialSquare.Team == selectedPiece.Team)
@@ -72,7 +75,7 @@ namespace Assets.Scripts.Model
 
         public static int PawnTwoSquareAdvanceYLocation(Team team)
         {
-            return (Board.SquaresInRow + PawnYDirection(team) * 2) % Board.SquaresInRow;
+            return team == Team.White ? 3 : 4;
         }
     }
 }

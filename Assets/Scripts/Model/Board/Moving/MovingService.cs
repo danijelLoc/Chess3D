@@ -28,7 +28,6 @@ namespace Assets.Scripts.Model
             }
         }
 
-
         private static List<MoveCommand> RookAvailableMoves(Piece selectedPiece, Board board)
         {
             return MovingUtils.ContinuousMoves(MovingUtils.lineDirections, selectedPiece, board, Board.SquaresInRow);
@@ -49,7 +48,10 @@ namespace Assets.Scripts.Model
 
         private static List<MoveCommand> KingAvailableMoves(Piece selectedPiece, Board board)
         {
-            return MovingUtils.ContinuousMoves(MovingUtils.lineDirections, selectedPiece, board, 1);
+            List<MoveCommand> diagonalMoves = MovingUtils.ContinuousMoves(MovingUtils.diagonalDirections, selectedPiece, board, 1);
+            List<MoveCommand> lineMoves = MovingUtils.ContinuousMoves(MovingUtils.lineDirections, selectedPiece, board, 1);
+            diagonalMoves.AddRange(lineMoves);
+            return diagonalMoves;
         }
 
         private static List<MoveCommand> KnightAvailableMoves(Piece selectedPiece, Board board)
@@ -58,9 +60,9 @@ namespace Assets.Scripts.Model
             foreach (var direction in MovingUtils.knightDirections)
             {
                 Vector2Integer potentialSquare = selectedPiece.CurrentSquare + direction;
-                Piece pieceOnPotentialSquare = board.Layout[potentialSquare.X, potentialSquare.Y];
                 if (!Board.IsSquareInsideBoard(potentialSquare))
-                    break;
+                    continue;
+                Piece pieceOnPotentialSquare = board.Layout[potentialSquare.X, potentialSquare.Y];
                 if (pieceOnPotentialSquare == null)
                 {
                     MoveCommand move = new MoveCommand(selectedPiece, selectedPiece.CurrentSquare, null, potentialSquare);
@@ -71,10 +73,9 @@ namespace Assets.Scripts.Model
                     // TODO check king shielding
                     MoveCommand move = new MoveCommand(selectedPiece, selectedPiece.CurrentSquare, pieceOnPotentialSquare, potentialSquare);
                     moves.Add(move);
-                    break;
                 }
                 else if (pieceOnPotentialSquare.Team == selectedPiece.Team)
-                    break;
+                    continue;
             }
             return moves;
         }
@@ -86,23 +87,26 @@ namespace Assets.Scripts.Model
             // advance
             Vector2Integer direction = MovingUtils.PawnLineDirection(selectedPawn.Team);
             var lineAdvanceMoves = MovingUtils.ContinuousMoves(new List<Vector2Integer> { direction }, selectedPawn,
-                board, selectedPawn.MoveCounter == 0 ? 2 : 1);
+                board, selectedPawn.MoveCounter == 0 ? 2 : 1, false);
             moves.AddRange(lineAdvanceMoves);
 
             // atack
             List<Vector2Integer> attackDirections = MovingUtils.PawnAttackDirections(selectedPawn.Team);
             foreach (var attackDirection in attackDirections) {
                 Vector2Integer destination = selectedPawn.CurrentSquare + attackDirection;
+                if (!Board.IsSquareInsideBoard(destination))
+                    continue;
                 Piece pieceToCapture = board.Layout[destination.X, destination.Y];
                 Piece pieceNextTo = board.Layout[destination.X, selectedPawn.CurrentSquare.Y];
                 // pieceToCaptureEnPassant
-                if (pieceNextTo != null && pieceNextTo.MoveCounter == 1 && pieceNextTo.CurrentSquare.Y == MovingUtils.PawnTwoSquareAdvanceYLocation(pieceNextTo.Team))
+                if (pieceNextTo != null && pieceNextTo.Type == PieceType.Pawn && pieceNextTo.MoveCounter == 1 &&
+                    pieceNextTo.CurrentSquare.Y == MovingUtils.PawnTwoSquareAdvanceYLocation(pieceNextTo.Team))
                 {
                     // TODO turn right after two square advance only
                     var enPassant = new MoveCommand(selectedPawn, selectedPawn.CurrentSquare, pieceNextTo, destination);
                     moves.Add(enPassant);
                 }
-                if (pieceToCapture != null)
+                if (pieceToCapture != null && pieceToCapture.Team != selectedPawn.Team)
                 {
                     moves.Add(new MoveCommand(selectedPawn, selectedPawn.CurrentSquare, pieceToCapture, destination));
                 }
