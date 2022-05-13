@@ -66,8 +66,8 @@ namespace Assets.Scripts.Model
 
         private static CastlingCommand GetCastlingCommand(MoveCommand move, Board board)
         {
-            Vector2Integer leftDirection = new Vector2Integer(1, 0);
-            Vector2Integer rightDirection = new Vector2Integer(-1, 0);
+            Vector2Integer leftDirection = new Vector2Integer(-1, 0);
+            Vector2Integer rightDirection = new Vector2Integer(1, 0);
             int firstRow = move.SelectedPiece.Team == Team.White ? 0 : 7;
 
             var LeftCastlingKingLocation = new Vector2Integer(MovingUtils.LeftCastlingKingXLocation, firstRow);
@@ -87,7 +87,7 @@ namespace Assets.Scripts.Model
                     return new CastlingCommand(move.SelectedPiece, move.StartSquareLocation, LeftCastlingKingLocation,
                         move.EndSquareLocation, firstPiece, firstPiece.CurrentSquare, LeftCastlingRookLocation);
                 }
-                else if (direction.Equals(leftDirection) && firstPiece.CurrentSquare.X == 7) {
+                else if (direction.Equals(rightDirection) && firstPiece.CurrentSquare.X == 7) {
                     return new CastlingCommand(move.SelectedPiece, move.StartSquareLocation, RightCastlingKingLocation,
                         move.EndSquareLocation, firstPiece, firstPiece.CurrentSquare, RightCastlingRookLocation);
                 }
