@@ -5,6 +5,6 @@ namespace Assets.Scripts.Controller
 {
     public interface IMouseClickHandler
     {
-        void ProcessInput(Vector3 inputPosition, GameObject selectedObject, Action onClick);
+        void ProcessLeftMouseInput(Vector3 inputPosition, GameObject selectedObject, Action onClick);
     }
 }

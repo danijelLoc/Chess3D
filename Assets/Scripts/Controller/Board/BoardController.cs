@@ -6,7 +6,7 @@ using Assets.Scripts.View;
 
 namespace Assets.Scripts.Controller
 {
-    public class BoardController : MonoBehaviour, IMouseClickHandler
+    public class BoardController : MonoBehaviour, IMouseClickHandler, IUndoRedoKeysHandler
     {
         private BoardView boardView;
         private GameManager gameManager;
@@ -23,10 +23,20 @@ namespace Assets.Scripts.Controller
             InitialLayout();
         }
 
-        public void ProcessInput(Vector3 inputPosition, GameObject selectedObject, Action onClick)
+        public void ProcessLeftMouseInput(Vector3 inputPosition, GameObject selectedObject, Action onClick)
         {
             Vector2Integer squareLocation = boardView.SquareLocationFromPosition(inputPosition);
             gameManager.OnSquareSelected(squareLocation);
+        }
+
+        public void ProcessUndoCommandInput()
+        {
+            gameManager.OnUndoSelected();
+        }
+
+        public void ProcessRedoCommandInput()
+        {
+            gameManager.OnRedoSelected();
         }
 
         public void ShowLayout(Board boardLayout)

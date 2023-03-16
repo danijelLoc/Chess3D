@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.3731193, g: 0.38073996, b: 0.3587269, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311915, g: 0.3807396, b: 0.35872662, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -847,12 +847,12 @@ GameObject:
   - component: {fileID: 1100275509982196123}
   - component: {fileID: 4101421545833102910}
   - component: {fileID: 2238247660770495220}
-  - component: {fileID: 6777656233896331399}
   - component: {fileID: 6777656233896331398}
   - component: {fileID: 6777656233896331401}
   - component: {fileID: 6777656233896331403}
   - component: {fileID: 6777656233896331402}
   - component: {fileID: 6777656233896331400}
+  - component: {fileID: 6777656233896331404}
   m_Layer: 0
   m_Name: Chess Board
   m_TagString: Untagged
@@ -1010,18 +1010,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pieceViewCreator: {fileID: 6777656233896331402}
---- !u!114 &6777656233896331399
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 292494366889257761}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca31b3666e0fc49f487b5a95beef228c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &6777656233896331400
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1087,3 +1075,15 @@ MonoBehaviour:
   enemySquareColor: {r: 0.4811321, g: 0.14297792, b: 0.14297792, a: 0}
   squareMarkerMaterial: {fileID: 2100000, guid: a3e9a6e1569d842a684694318c91552c, type: 2}
   squareMarkerPrefab: {fileID: 3980441934984475872, guid: a50069d31362648d2b92c213600191c9, type: 3}
+--- !u!114 &6777656233896331404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 292494366889257761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dba92f2c6667445d953d109c50ed8a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

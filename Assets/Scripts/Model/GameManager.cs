@@ -3,8 +3,10 @@ using System.Collections.Generic;
 
 namespace Assets.Scripts.Model
 {
-    public class GameManager
+    public class GameManager // TODO: Interface !!!!
     {
+        private List<ICommand> playedCommands;
+        private int previousCommandIndex;
         private Piece selectedPiece;
         private List<ICommand> selectedPieceAvailableMoves;
         private Board board;
@@ -12,7 +14,9 @@ namespace Assets.Scripts.Model
 
         public GameManager(Board startingBoardLayout, Team startingTeam = Team.White)
         {
-            this.board = startingBoardLayout;
+            board = startingBoardLayout;
+            playedCommands = new List<ICommand>();
+            previousCommandIndex = -1;
             currentTeam = startingTeam;
         }
 
@@ -35,12 +39,44 @@ namespace Assets.Scripts.Model
             }
         }
 
+        public void OnUndoSelected() {
+            if (previousCommandIndex >= 0) 
+            {
+                ICommand previousCommand = playedCommands[previousCommandIndex];
+                previousCommand.Undo();
+                SwitchCurrentTeam();
+                previousCommandIndex -= 1;
+            }
+        }
+
+        public void OnRedoSelected() {
+            int nextCommandIndex = previousCommandIndex + 1;
+            if (nextCommandIndex < playedCommands.Count) 
+            {
+                ICommand nextCommand = playedCommands[nextCommandIndex];
+                nextCommand.Do();
+                SwitchCurrentTeam();
+                previousCommandIndex += 1;
+            }
+        }
+
+        private void RemoveUpcomingCommands() {
+            int nextCommandIndex = previousCommandIndex + 1;
+            if (nextCommandIndex < playedCommands.Count) 
+            {
+                playedCommands.RemoveRange(nextCommandIndex, playedCommands.Count - nextCommandIndex);
+            }
+        }
+
         private void TryToMoveSelectedPiece(Vector2Integer destinationSquare)
         {
             ICommand availableCommand = AvailableMoveForDestinationSquare(destinationSquare);
             if (availableCommand != null)
             {
                 availableCommand.Do();
+                RemoveUpcomingCommands();
+                playedCommands.Add(availableCommand);
+                previousCommandIndex += 1;
                 Deselect();
                 SwitchCurrentTeam();
             }
@@ -81,7 +117,6 @@ namespace Assets.Scripts.Model
             {
                 case Team.White:
                     currentTeam = Team.Black; break;
-
                 case Team.Black:
                     currentTeam = Team.White; break;
             }

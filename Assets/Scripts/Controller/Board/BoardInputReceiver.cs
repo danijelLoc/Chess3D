@@ -3,14 +3,16 @@ using UnityEngine;
 namespace Assets.Scripts.Controller
 {
     [RequireComponent(typeof(BoxCollider))]
-    public class BoardMouseClickReceiver : MonoBehaviour, IMouseClickReceiver
+    public class BoardInputReceiver : MonoBehaviour
     {
-        protected IMouseClickHandler[] clickHandlers;
+        protected IMouseClickHandler mouseClickHandler;
+        protected IUndoRedoKeysHandler undoRedoInputHandler;
         protected BoxCollider targetBoxCollider;
 
         private void Awake()
         {
-            clickHandlers = GetComponents<IMouseClickHandler>();
+            mouseClickHandler = GetComponent<IMouseClickHandler>();
+            undoRedoInputHandler = GetComponent<IUndoRedoKeysHandler>();
             targetBoxCollider = GetComponent<BoxCollider>();
         }
 
@@ -25,16 +27,16 @@ namespace Assets.Scripts.Controller
                     // if player click on upper side of board
                     if (hit.collider == targetBoxCollider &&
                         hit.point.y >= targetBoxCollider.bounds.max.y - 1e-4)
-                        OnInputRecieved(hit.point);
+                        mouseClickHandler.ProcessLeftMouseInput(hit.point, null, null);
                 }
             }
-        }
-
-        public void OnInputRecieved(Vector3 clickPosition)
-        {
-            foreach (var clickHandler in clickHandlers)
-            {
-                clickHandler.ProcessInput(clickPosition, null, null);
+            if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Z)) { // TODO: Unity shortcut ctrl+z cannot be used in game ....
+                if (Input.GetKey(KeyCode.A)) {
+                    undoRedoInputHandler.ProcessRedoCommandInput();
+                } else {
+                    undoRedoInputHandler.ProcessUndoCommandInput();
+                }
+                
             }
         }
     }
