@@ -39,22 +39,9 @@ namespace Assets.Scripts.View
             meshRenderer.material.color = selected ? Color.green : originaMateriallColor;
         }
 
-        public void UpdatePieceType(PieceType newType)
+        public void UpdatePieceType(Piece piece, PieceType newType)
         {
-            MeshFilter newMesh;
-            if (newType == PieceType.Queen)
-            {
-                newMesh = pieceViewCreator.queenMeshFilter;
-            }
-            else if (newType == PieceType.Queen)
-            {
-                newMesh = pieceViewCreator.pawnMeshFilter;
-            }
-            else
-                throw new NotImplementedException();
-            MeshFilter current = GetComponent(typeof(MeshFilter)) as MeshFilter;
-            current.mesh = Instantiate(newMesh.mesh) as Mesh;
-
+            pieceViewCreator.ChangeTypeOfPiece(piece, newType);
         }
 
         public void UpdateSquareLocation(Vector2Integer newSquareLocation)

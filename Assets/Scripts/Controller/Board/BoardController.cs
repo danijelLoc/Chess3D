@@ -39,15 +39,6 @@ namespace Assets.Scripts.Controller
             gameManager.OnRedoSelected();
         }
 
-        public void ShowLayout(Board boardLayout)
-        {
-            foreach (Piece piece in boardLayout.pieces)
-            {
-                PieceView pieceView = pieceViewCreator.CreatePieceView(piece);
-                //pieceView.enabled = piece.Destoryed;
-            }
-        }
-
         private void InitialLayout()
         {
             // TODO from file
@@ -84,6 +75,14 @@ namespace Assets.Scripts.Controller
             pieces.Add(new Piece(PieceType.Pawn, team, new Vector2Integer(7, secondRowY)));
 
             return pieces;
+        }
+
+        private void ShowLayout(Board boardLayout)
+        {
+            foreach (Piece piece in boardLayout.pieces)
+            {
+                PieceView pieceView = pieceViewCreator.CreatePieceView(piece);
+            }
         }
     }
 }

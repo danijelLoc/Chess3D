@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -7,22 +7,22 @@ namespace Assets.Scripts.Model
     public class MovingService
     {
 
-        public static List<ICommand> AvailableMoves(Piece piece, Board biard)
+        public static List<ICommand> AvailableMoves(Piece piece, Board board)
         {
             switch (piece.Type)
             {
                 case PieceType.Pawn:
-                    return PawnAvailableMoves(piece, biard);
+                    return PawnAvailableMoves(piece, board);
                 case PieceType.Knight:
-                    return KnightAvailableMoves(piece, biard);
+                    return KnightAvailableMoves(piece, board);
                 case PieceType.Bishop:
-                    return BishopAvailableMoves(piece, biard);
+                    return BishopAvailableMoves(piece, board);
                 case PieceType.Rook:
-                    return RookAvailableMoves(piece, biard);
+                    return RookAvailableMoves(piece, board);
                 case PieceType.Queen:
-                    return QueenAvailableMoves(piece, biard);
+                    return QueenAvailableMoves(piece, board);
                 case PieceType.King:
-                    return KingAvailableMoves(piece, biard);
+                    return KingAvailableMoves(piece, board);
                 default:
                     throw new NotImplementedException("Moving strategy for piece type is not implemented");
             }
@@ -75,7 +75,7 @@ namespace Assets.Scripts.Model
             var RightCastlingKingLocation = new Vector2Integer(MovingUtils.RightCastlingKingXLocation, firstRow);
             var RightCastlingRookLocation = new Vector2Integer(MovingUtils.RightCastlingRookXLocation, firstRow);
 
-            // TODO cant castle under attack, also if new position is under attack, or if path between is under attack
+            // TODO can't castle under attack, also if new position is under attack, or if path between is under attack
             var direction = move.EndSquareLocation - move.StartSquareLocation;
             var firstPiece = MovingUtils.FirstPieceInDirection(direction, move.SelectedPiece, board);
             if (move.SelectedPiece.MoveCounter == 0 && firstPiece.Type == PieceType.Rook &&
@@ -146,7 +146,7 @@ namespace Assets.Scripts.Model
                 if (pieceNextTo != null && pieceNextTo.Type == PieceType.Pawn && pieceNextTo.MoveCounter == 1 &&
                     pieceNextTo.CurrentSquare.Y == MovingUtils.PawnTwoSquareAdvanceYLocation(pieceNextTo.Team))
                 {
-                    // TODO turn right after two square advance only
+                    // TODO: EnPassant must be next move after enemy pawn moves ???
                     var enPassant = new MoveCommand(selectedPawn, selectedPawn.CurrentSquare, pieceNextTo, destination);
                     moves.Add(enPassant);
                 }

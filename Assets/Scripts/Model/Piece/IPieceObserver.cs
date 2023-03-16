@@ -8,7 +8,7 @@ namespace Assets.Scripts.Model
     {
         void UpdateSelection(Boolean selected);
         void UpdateIsAlive(Boolean isAlive);
-        void UpdatePieceType(PieceType newType);
+        void UpdatePieceType(Piece piece, PieceType newType);
         void UpdateSquareLocation(Vector2Integer newSquareLocation);
     }
 }

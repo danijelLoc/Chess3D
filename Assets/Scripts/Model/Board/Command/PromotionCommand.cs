@@ -1,5 +1,7 @@
 ﻿using System;
+using UnityEngine;
 namespace Assets.Scripts.Model
+
 {
     public class PromotionCommand : MoveCommand
     {
@@ -11,13 +13,15 @@ namespace Assets.Scripts.Model
         public override void Do()
         {
             base.Do();
-            SelectedPiece.SetType(PieceType.Queen);
+            SelectedPiece.Promote();
+            Debug.Log("pawn promoted");
         }
 
         public override void Undo()
         {
             base.Undo();
-            SelectedPiece.SetType(PieceType.Pawn);
+            SelectedPiece.Demote();
+            Debug.Log("queen demoted");
         }
     }
 }

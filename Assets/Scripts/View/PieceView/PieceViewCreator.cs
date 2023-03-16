@@ -39,5 +39,18 @@ namespace Assets.Scripts.View
             piece.observer = newPiece;
             return newPiece;
         }
+
+        public PieceView ChangeTypeOfPiece(Piece piece, PieceType newType)
+        {
+            PieceView piecePrefab = pieceTypeToPrefab[newType];
+            PieceView newPiece = Instantiate(piecePrefab);
+            newPiece.SetMaterial(teamToMaterial[piece.Team]);
+            newPiece.SetBoard(boardView);
+            newPiece.SetPieceViewCreator(this);
+            newPiece.transform.localPosition = boardView.PositionFromSquareLocation(piece.CurrentSquare);
+            piece.observer.UpdateIsAlive(false);
+            piece.observer = newPiece;
+            return newPiece;
+        }
     }
 }

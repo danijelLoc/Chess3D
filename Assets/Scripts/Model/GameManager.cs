@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using UnityEngine;
 using System.Collections.Generic;
 
 namespace Assets.Scripts.Model
@@ -6,7 +7,7 @@ namespace Assets.Scripts.Model
     public class GameManager // TODO: Interface !!!!
     {
         private List<ICommand> playedCommands;
-        private int previousCommandIndex;
+        private int previousCommandIndex; // TODO: Extract to custom commands history manager
         private Piece selectedPiece;
         private List<ICommand> selectedPieceAvailableMoves;
         private Board board;
@@ -113,6 +114,7 @@ namespace Assets.Scripts.Model
 
         private void SwitchCurrentTeam()
         {
+            Debug.Log("Switch teams");
             switch (currentTeam)
             {
                 case Team.White:

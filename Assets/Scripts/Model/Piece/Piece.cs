@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
+using UnityEngine;
 using System.Collections.Generic;
 
 namespace Assets.Scripts.Model
 {
     public class Piece
     {
+        private int id;
         public PieceType Type { get; private set; }
         public Team Team { get; private set; }
         public Vector2Integer CurrentSquare { get; private set; }
@@ -17,6 +19,7 @@ namespace Assets.Scripts.Model
 
         public Piece(PieceType type, Team team, Vector2Integer currentSquare, Boolean isAlive = true)
         {
+            this.id = (int)team * 100 + (int)type + currentSquare.X + currentSquare.Y;
             this.Type = type;
             this.Team = team;
             this.CurrentSquare = currentSquare;
@@ -35,11 +38,11 @@ namespace Assets.Scripts.Model
             if ((obj == null) || !this.GetType().Equals(obj.GetType()))
             {
                 return false;
-            } else
+            } 
+            else
             {
                 Piece p = (Piece)obj;
-                return (Type == p.Type) && (Team == p.Team) &&
-                    (CurrentSquare == p.CurrentSquare);
+                return id == p.id;
             }
         }
 
@@ -49,10 +52,20 @@ namespace Assets.Scripts.Model
             observer?.UpdateSelection(isSelected);
         }
 
-        public void SetType(PieceType type)
+        public void Promote()
         {
-            Type = type;
-            observer?.UpdatePieceType(type);
+            if (Type != PieceType.Pawn) { throw new Exception("Promotion from pawns is only allowed"); }
+            Type = PieceType.Queen;
+            observer.UpdatePieceType(this, Type);
+            Debug.Log("changed type");
+        }
+
+        public void Demote()
+        {
+            if (Type != PieceType.Queen) { throw new Exception("Demotion from queens is only allowed"); }
+            Type = PieceType.Pawn;
+            observer.UpdatePieceType(this, Type);
+            Debug.Log("changed type");
         }
 
         public void SetIsAlive(Boolean isAlive)
