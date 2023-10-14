@@ -41,7 +41,7 @@ namespace Assets.Scripts.Controller
 
         private void InitialLayout()
         {
-            // TODO from file
+            // TODO: layout from file
             List<Piece> pieces = new List<Piece>();
             pieces.AddRange(CreateTeam(Team.White));
             pieces.AddRange(CreateTeam(Team.Black));
