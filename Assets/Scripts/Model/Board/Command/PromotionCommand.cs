@@ -10,14 +10,14 @@ namespace Assets.Scripts.Model
             base(selectedPiece, startSquareLocation, pieceToBeCaptured, endSquareLocation)
         { }
 
-        public override void Do()
+        public override void Do(Boolean show = true)
         {
             base.Do();
             SelectedPiece.Promote();
             Debug.Log("pawn promoted");
         }
 
-        public override void Undo()
+        public override void Undo(Boolean show = true)
         {
             base.Undo();
             SelectedPiece.Demote();

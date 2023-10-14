@@ -24,16 +24,16 @@ namespace Assets.Scripts.Model
             RookEndSquareLocation = rookEndSquareLocation;
         }
 
-        public virtual void Do()
+        public virtual void Do(Boolean show = true)
         {
-            King.MoveTo(KingEndSquareLocation);
-            Rook.MoveTo(RookEndSquareLocation);
+            King.MoveTo(KingEndSquareLocation, false, show);
+            Rook.MoveTo(RookEndSquareLocation, false, show);
         }
 
-        public virtual void Undo()
+        public virtual void Undo(Boolean show = true)
         {
-            King.MoveTo(KingStartSquareLocation, true);
-            Rook.MoveTo(RookStartSquareLocation, true);
+            King.MoveTo(KingStartSquareLocation, true, show);
+            Rook.MoveTo(RookStartSquareLocation, true, show);
         }
 
         public Vector2Integer SquareClicked()

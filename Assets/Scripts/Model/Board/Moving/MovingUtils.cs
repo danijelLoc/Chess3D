@@ -28,41 +28,6 @@ namespace Assets.Scripts.Model
         public static int RightCastlingKingXLocation = 6;
         public static int RightCastlingRookXLocation = 5;
 
-        public static List<ICommand> ContinuousMoves(List<Vector2Integer> directions, Piece selectedPiece, Board board, int range, bool withAttack = true)
-        {
-            List<ICommand> moves = new List<ICommand>();
-
-            foreach (var direction in directions)
-            {
-                for (int i = 1; i <= range; i++)
-                {
-                    Vector2Integer potentialSquare = selectedPiece.CurrentSquare + direction * i;
-                    if (!Board.IsSquareInsideBoard(potentialSquare))
-                        break;
-                    Piece pieceOnPotentialSquare = board.Layout[potentialSquare.X, potentialSquare.Y];
-                    if (pieceOnPotentialSquare == null)
-                    {
-                        // TODO undo, start changes maybe
-                        MoveCommand move = new MoveCommand(selectedPiece, selectedPiece.CurrentSquare, null, potentialSquare);
-                        moves.Add(move);
-                    }
-                    else if (pieceOnPotentialSquare.Team != selectedPiece.Team)
-                    {
-                        // TODO check king shielding
-                        if (withAttack)
-                        {
-                            MoveCommand move = new MoveCommand(selectedPiece, selectedPiece.CurrentSquare, pieceOnPotentialSquare, potentialSquare);
-                            moves.Add(move);
-                        }
-                        break;
-                    }
-                    else if (pieceOnPotentialSquare.Team == selectedPiece.Team)
-                        break;
-                }
-            }
-            return moves;
-        }
-
         public static Piece FirstPieceInDirection (Vector2Integer direction, Piece selectedPiece, Board board)
         {
             int i = 1;

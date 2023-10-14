@@ -153,8 +153,8 @@ Light:
   m_Shape: 0
   m_Color: {r: 0.990566, g: 0.8429055, b: 0.6494749, a: 1}
   m_Intensity: 2
-  m_Range: 5
-  m_SpotAngle: 48
+  m_Range: 7
+  m_SpotAngle: 33
   m_InnerSpotAngle: 1
   m_CookieSize: 10
   m_Shadows:
@@ -209,14 +209,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 222790203}
-  m_LocalRotation: {x: 0.70710677, y: 0, z: 0, w: 0.70710677}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalRotation: {x: 0.6884642, y: -0, z: -0, w: 0.72527033}
+  m_LocalPosition: {x: 0, y: 1.883, z: -0.11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 90, y: 90, z: 90}
+  m_LocalEulerAnglesHint: {x: 87.017, y: 0, z: 0}
 --- !u!1 &319372360
 GameObject:
   m_ObjectHideFlags: 0
@@ -273,7 +273,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 528652905}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
@@ -474,7 +474,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
@@ -1055,10 +1055,10 @@ MonoBehaviour:
   - {fileID: 746264988129448381, guid: 263b0699291ec436a8b4a9d7f81bade5, type: 3}
   - {fileID: 8575564736732585126, guid: 7c072ca3f902147338337745abc2b066, type: 3}
   - {fileID: 5249378403862095211, guid: 0a349cd5fb8f54a608200044150fdeb8, type: 3}
-  whitePieceMaterial: {fileID: 2100000, guid: c4309d4054978f93fb08657b9b52c8db, type: 2}
+  whitePieceMaterial: {fileID: -8848810374240701247, guid: 7992579dc1df2e84faa151def391ea29, type: 3}
   blackPieceMaterial: {fileID: 2100000, guid: 7456a8e266d7b8a66878f5438d7298f1, type: 2}
-  queenMeshFilter: {fileID: 0}
-  pawnMeshFilter: {fileID: 0}
+  queenMeshFilter: {fileID: 1802350584952142095, guid: 7c072ca3f902147338337745abc2b066, type: 3}
+  pawnMeshFilter: {fileID: 3479891363829479842, guid: 263b0699291ec436a8b4a9d7f81bade5, type: 3}
 --- !u!114 &6777656233896331403
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1071,8 +1071,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a941773625aa42b6ba0193fe3cf63f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  freeSquareColor: {r: 0.1864839, g: 0.6603774, b: 0.15263441, a: 0.69803923}
-  enemySquareColor: {r: 0.4811321, g: 0.14297792, b: 0.14297792, a: 0.6862745}
+  freeSquareColor: {r: 0, g: 0.5372549, b: 0.004888503, a: 0.8627451}
+  enemySquareColor: {r: 0.6132076, g: 0.08388218, b: 0.08388218, a: 0.8627451}
   squareMarkerMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   squareMarkerPrefab: {fileID: 3980441934984475872, guid: a50069d31362648d2b92c213600191c9, type: 3}
 --- !u!114 &6777656233896331404

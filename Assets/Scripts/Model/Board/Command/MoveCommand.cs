@@ -6,7 +6,7 @@ namespace Assets.Scripts.Model
         public Piece SelectedPiece { get; private set; } 
         public Vector2Integer StartSquareLocation { get; private set; }
         
-        public Piece? PieceToBeCaptured { get; private set; }
+        public Piece PieceToBeCaptured { get; private set; }
         public Vector2Integer EndSquareLocation { get; private set; }
 
         public MoveCommand(Piece selectedPiece, Vector2Integer startSquareLocation, Piece pieceToBeCaptured, Vector2Integer endSquareLocation)
@@ -17,16 +17,16 @@ namespace Assets.Scripts.Model
             this.EndSquareLocation = endSquareLocation;
         }
 
-        public virtual void Do()
+        public virtual void Do(Boolean show = true)
         {
-            SelectedPiece.MoveTo(EndSquareLocation);
-            PieceToBeCaptured?.SetIsAlive(false);
+            SelectedPiece.MoveTo(EndSquareLocation, false, show);
+            PieceToBeCaptured?.SetIsAlive(false, show);
         }
 
-        public virtual void Undo()
+        public virtual void Undo(Boolean show = true)
         {
-            SelectedPiece.MoveTo(StartSquareLocation, true);
-            PieceToBeCaptured?.SetIsAlive(true);
+            SelectedPiece.MoveTo(StartSquareLocation, true, show);
+            PieceToBeCaptured?.SetIsAlive(true, show);
         }
 
         public Vector2Integer SquareClicked()

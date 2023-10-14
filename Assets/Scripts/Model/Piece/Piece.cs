@@ -7,7 +7,7 @@ namespace Assets.Scripts.Model
 {
     public class Piece
     {
-        private int id;
+        public int id {get;}
         public PieceType Type { get; private set; }
         public Team Team { get; private set; }
         public Vector2Integer CurrentSquare { get; private set; }
@@ -19,7 +19,7 @@ namespace Assets.Scripts.Model
 
         public Piece(PieceType type, Team team, Vector2Integer currentSquare, Boolean isAlive = true)
         {
-            this.id = (int)team * 100 + (int)type + currentSquare.X + currentSquare.Y;
+            this.id = (int)team * 200 + (int)type * 100 + currentSquare.X + currentSquare.Y;
             this.Type = type;
             this.Team = team;
             this.CurrentSquare = currentSquare;
@@ -68,20 +68,22 @@ namespace Assets.Scripts.Model
             Debug.Log("changed type");
         }
 
-        public void SetIsAlive(Boolean isAlive)
+        public void SetIsAlive(Boolean isAlive, Boolean show = true)
         {
             IsAlive = isAlive;
-            observer?.UpdateIsAlive(isAlive);
+            if (show)
+                observer?.UpdateIsAlive(isAlive);
         }
 
-        public void MoveTo(Vector2Integer destinationSquare, Boolean isUndo = false)
+        public void MoveTo(Vector2Integer destinationSquare, Boolean isUndo = false, Boolean show = true)
         {
             CurrentSquare = destinationSquare;
-            observer?.UpdateSquareLocation(destinationSquare);
             if (isUndo)
                 MoveCounter--;
             else
                 MoveCounter++;
+            if (show) 
+                observer?.UpdateSquareLocation(destinationSquare);
         }
     }
 }
